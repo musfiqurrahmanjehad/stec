@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEC TE- Level 1 Term 2 Class Routine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container my-4">
+    <!-- Header -->
+    <header class="text-center mb-4">
+        <h1>STEC TE- Level 1 Term 2 Class Routine</h1>
+    </header>
+
+    <!-- Date and Time Display -->
+    <div id="date-time" class="text-center fs-4 mb-4"></div>
+
+    <!-- Current Class Indicator -->
+    <div id="current-class" class="text-center fs-4 text-danger mt-4"></div>
+
+    <!-- Routine Table -->
+    <table class="table table-bordered table-striped text-center">
+        <thead class="table-primary">
+            <tr>
+                <th>Day</th>
+                <th>08.00am to 08.50am</th>
+                <th>08.50am to 09.40am</th>
+                <th>10.00am to 10.50am</th>
+                <th>10.50am to 12.30pm (LAB CLASS)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="day" id="saturday">
+                <td>Saturday</td>
+                <td>Mathematics-II (TE-1201)<br>R - 504</td>
+                <td>Natural Textile Fibre (TE-1206)<br>R - 504</td>
+                <td>Organic Chemistry (TE-1204)<br>R - 504</td>
+                <td>Organic Chemistry & Quantitative Chemical Analysis Lab (TE-1205)<br>R - 405</td>
+            </tr>
+            <tr class="day" id="sunday">
+                <td>Sunday</td>
+                <td>Organic Chemistry (TE-1204)<br>R - 504</td>
+                <td>Polymer Science and Engineering (TE-1207)<br>R - 504</td>
+                <td>Physics-II (TE-1202)<br>R - 504</td>
+                <td>Physics-II Lab (TE-1203)<br>R - 404</td>
+            </tr>
+            <tr class="day" id="monday">
+                <td>Monday</td>
+                <td>Natural Textile Fibre (TE-1206)<br>R - 504</td>
+                <td>Physics-II (TE-1202)<br>R - 504</td>
+                <td>Engineering Materials (TE-1209)<br>R - 504</td>
+                <td>Communicative English and employability Skills (TE-1208)<br>R - C. lab</td>
+            </tr>
+            <tr class="day" id="tuesday">
+                <td>Tuesday</td>
+                <td>Polymer Science and Engineering (TE-1207)<br>R - 504</td>
+                <td>Organic Chemistry (TE-1204)<br>R - 504</td>
+                <td>Mathematics-II (TE-1201)<br>R - 504</td>
+                <td>Communicative English and employability Skills (TE-1208)<br>R - C. lab</td>
+            </tr>
+            <tr class="day" id="wednesday">
+                <td>Wednesday</td>
+                <td>Mathematics-II (TE-1201)<br>R - 504</td>
+                <td>Engineering Materials (TE-1209)<br>R - 504</td>
+                <td>Physics-II (TE-1202)<br>R - 504</td>
+                <td>Engineering Workshop Practices (TE-1210)<br>Mechanical Lab</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<!-- Footer -->
+<footer class="text-center mt-5 py-3 bg-light">
+    <p>Credit goes to <strong>DUCKIST</strong></p>
+</footer>
+
+<script>
+    // Function to format time with leading zero
+    function formatTime(time) {
+        return time < 10 ? '0' + time : time;
+    }
+
+    // Function to update date and time display
+    function updateDateTime() {
+        const now = new Date();
+        const day = now.toLocaleString('en-us', { weekday: 'long' });
+        const date = now.toLocaleDateString();
+        const time = formatTime(now.getHours()) + ':' + formatTime(now.getMinutes());
+        document.getElementById('date-time').textContent = `${day}, ${date} - ${time}`;
+    }
+
+    // Highlight today's routine
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const today = new Date().getDay();
+    document.getElementById(days[today]).classList.add('table-success');
+
+    // Determine and highlight current class
+    function highlightCurrentClass() {
+        const now = new Date();
+        const currentTime = now.getHours() * 100 + now.getMinutes();
+        const times = [
+            { start: 800, end: 850, column: 1 },
+            { start: 850, end: 940, column: 2 },
+            { start: 1000, end: 1050, column: 3 },
+            { start: 1050, end: 1230, column: 4 }
+        ];
+
+        let classOngoing = false;
+
+        times.forEach(timeSlot => {
+            if (currentTime >= timeSlot.start && currentTime < timeSlot.end) {
+                document.querySelector(`#${days[today]} td:nth-child(${timeSlot.column + 1})`).classList.add('table-warning');
+                document.getElementById('current-class').textContent = 'There is a class ongoing now!';
+                classOngoing = true;
+            }
+        });
+
+        if (!classOngoing) {
+            document.getElementById('current-class').textContent = 'No class is ongoing at the moment.';
+        }
+    }
+
+    // Update date and time every second
+    setInterval(updateDateTime, 1000);
+
+    // Highlight the class now
+    highlightCurrentClass();
+</script>
+
+</body>
+</html>
